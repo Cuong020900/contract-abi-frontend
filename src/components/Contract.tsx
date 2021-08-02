@@ -3,6 +3,7 @@ import { TransactionType } from "../enums/TransactionType";
 import type { IContract } from "../types/IContract";
 import Function from "./Function";
 import { Contract as EthersContract, ethers } from "ethers";
+import { Accordion } from "react-bootstrap";
 
 function Contract(props: { name: string }) {
   const [contractData, setContractData] = useState<IContract>();
@@ -29,10 +30,20 @@ function Contract(props: { name: string }) {
       const provider: ethers.providers.JsonRpcProvider =
         new ethers.providers.JsonRpcProvider("http://127.0.0.1:8545");
       const signer = provider.getSigner();
-      const res = await contract
+
+      if (type === TransactionType.CALL) {
+        const res = await contract
+          ?.connect(signer)
+          .callStatic?.[functionName](...Object.values(data));
+        console.log("\x1b[36m%s\x1b[0m", "res", res);
+        return res;
+      }
+
+      const tx = await contract
         ?.connect(signer)
-        .callStatic?.[functionName](...Object.values(data));
-      console.log("\x1b[36m%s\x1b[0m", "res", res);
+        ?.[functionName](...Object.values(data));
+      console.log("\x1b[36m%s\x1b[0m", "txHash", tx);
+      return tx;
     },
     [contract]
   );
@@ -42,15 +53,25 @@ function Contract(props: { name: string }) {
       return value.type === "function";
     });
     return listFunction?.map((value: any) => {
-        return <Function data={value} callback={callback}></Function>;
-    })
+      return (
+        <>
+
+          <Accordion defaultActiveKey="1">
+            <Accordion.Item eventKey="0">
+              <Accordion.Header>{value.name}</Accordion.Header>
+              <Accordion.Body>
+                <Function data={value} callback={callback}></Function>
+              </Accordion.Body>
+            </Accordion.Item>
+          </Accordion>
+          <br />
+        </>
+      );
+    });
   };
   return (
     <div className="Contract">
-      {/* <Function data={contractData?.abi[1]} callback={callback}></Function> */}
-      {
-          renderListFunction(contractData)
-      }
+      {renderListFunction(contractData)}
     </div>
   );
 }

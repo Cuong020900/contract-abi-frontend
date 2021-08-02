@@ -1,6 +1,9 @@
+import { BigNumber } from "ethers";
 import React, { useEffect, useState } from "react";
-import { Button, Col, FormControl, InputGroup, Row } from "react-bootstrap";
+import { Button, Col, FormControl, Row } from "react-bootstrap";
 import { TransactionType } from "../enums/TransactionType";
+
+const stringType = ['string', 'address'];
 
 function Function(props: { data: any; callback: any }) {
   const [functionData, setFunctionData] = useState<any>({});
@@ -9,7 +12,6 @@ function Function(props: { data: any; callback: any }) {
   useEffect(() => {
     console.log("\x1b[36m%s\x1b[0m", "props", props);
     setFunctionData(props.data);
-    console.log("\x1b[36m%s\x1b[0m", "functionData", functionData);
   }, [props]);
 
   const renderInputParams = () => {
@@ -17,19 +19,30 @@ function Function(props: { data: any; callback: any }) {
       return (
         <div key={value.name}>
           <Row>
-            <Col md={4}></Col>
-            <Col md={4}>
-              <InputGroup.Text>Params {index}</InputGroup.Text>
-              <FormControl
-                placeholder={`${value.name}: ${value.type}`}
-                aria-label="Username"
-                aria-describedby="basic-addon1"
-                onChange={(element) => {
-                  setParamValues((old: any) => {
-                    return { ...old, [value.name]: element.target.value };
-                  });
-                }}
-              />
+            <Col md={8}>
+              <Row>
+                <Col md={2}>Params {index}:</Col>
+                <Col md={12}>
+                  <FormControl
+                    placeholder={`${value.name}: ${value.type}`}
+                    aria-label="Username"
+                    aria-describedby="basic-addon1"
+                    onChange={(element) => {
+                      setParamValues((old: any) => {
+                        let input: string | number | BigNumber = element.target.value;
+                        const type = value.type;
+
+                        if (stringType.includes(type)) {
+                          return { ...old, [value.name]: input };
+                        }
+                        
+                        input = BigNumber.from(input);
+                        return { ...old, [value.name]: input };
+                      });
+                    }}
+                  />
+                </Col>
+              </Row>
               <br />
             </Col>
           </Row>
@@ -41,15 +54,44 @@ function Function(props: { data: any; callback: any }) {
     <div className="Function">
       <h2>{functionData?.name}</h2>
       {renderInputParams()}
-      <Button
-        onClick={() => {
-          console.log("\x1b[36m%s\x1b[0m", "paramsValues", paramValues);
-          props.callback(functionData.name, TransactionType.CALL, paramValues);
-        }}
-      >
-        Call
-      </Button>
-      <Button>Send</Button>
+      <Row>
+        <Col md={1}>
+          <Row>
+            <Button
+              variant={"success"}
+              onClick={() => {
+                console.log("\x1b[36m%s\x1b[0m", "paramsValues", paramValues);
+                props.callback(
+                  functionData.name,
+                  TransactionType.CALL,
+                  paramValues
+                );
+              }}
+            >
+              Call
+            </Button>
+          </Row>
+        </Col>
+      </Row>
+      <Row className={"mt-1"}>
+        <Col md={1}>
+          <Row>
+            <Button
+              variant={"secondary"}
+              onClick={() => {
+                console.log("\x1b[36m%s\x1b[0m", "paramsValues", paramValues);
+                props.callback(
+                  functionData.name,
+                  TransactionType.SEND,
+                  paramValues
+                );
+              }}
+            >
+              Send
+            </Button>
+          </Row>
+        </Col>
+      </Row>
     </div>
   );
 }
