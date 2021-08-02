@@ -10,15 +10,13 @@ function Contract(props: { name: string }) {
   const [contract, setContract] = useState<EthersContract>();
   // get file
   useEffect(() => {
-    const contract: IContract = require(`../abis/${props.name}.json`);
+    const contract: IContract = require(`../abis/${props.name}`);
 
     console.log("\x1b[36m%s\x1b[0m", "abi", contract);
     setContractData(contract);
     setContract(() => {
       return new EthersContract(contract.address, contract.abi);
     });
-
-    // duyet het function trong contract
   }, []);
 
   const callback = useCallback(
@@ -55,7 +53,6 @@ function Contract(props: { name: string }) {
     return listFunction?.map((value: any) => {
       return (
         <>
-
           <Accordion defaultActiveKey="1">
             <Accordion.Item eventKey="0">
               <Accordion.Header>{value.name}</Accordion.Header>
@@ -71,6 +68,7 @@ function Contract(props: { name: string }) {
   };
   return (
     <div className="Contract">
+      <h1>{props.name}</h1>
       {renderListFunction(contractData)}
     </div>
   );
