@@ -4,6 +4,7 @@ import type { IContract } from "../types/IContract";
 import Function from "./Function";
 import { Contract as EthersContract, ethers } from "ethers";
 import { Accordion } from "react-bootstrap";
+import './Contract.css'
 
 function Contract(props: { name: string }) {
   const [contractData, setContractData] = useState<IContract>();
@@ -55,7 +56,7 @@ function Contract(props: { name: string }) {
         <>
           <Accordion defaultActiveKey="1">
             <Accordion.Item eventKey="0">
-              <Accordion.Header>{value.name}</Accordion.Header>
+              <Accordion.Header style={{boxShadow: '1px 1px 2px 2px #AAA'}}>{value.name}</Accordion.Header>
               <Accordion.Body>
                 <Function data={value} callback={callback}></Function>
               </Accordion.Body>
@@ -68,7 +69,7 @@ function Contract(props: { name: string }) {
   };
   return (
     <div className="Contract">
-      <h1>{props.name}</h1>
+      <h1 className="title" style={{textShadow: '2px 2px #AAA'}}>{props.name}</h1>
       {renderListFunction(contractData)}
     </div>
   );

@@ -1,0 +1,11 @@
+.Contract {
+    width: 50%;
+    padding: 15px;
+    margin-left: auto;
+    margin-right: auto;
+}
+.title {
+    margin-top: 10px;
+    margin-bottom: 40px;
+    color: rgb(104, 92, 92);
+}

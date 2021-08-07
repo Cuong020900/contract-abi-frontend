@@ -2,6 +2,7 @@ import { BigNumber } from "ethers";
 import React, { useEffect, useState } from "react";
 import { Button, Col, FormControl, Row } from "react-bootstrap";
 import { TransactionType } from "../enums/TransactionType";
+import './Function.css'
 
 const stringType = ['string', 'address'];
 
@@ -21,7 +22,7 @@ function Function(props: { data: any; callback: any }) {
           <Row>
             <Col md={8}>
               <Row>
-                <Col md={2}>Params {index}:</Col>
+                <Col md={12} style={{textAlign: 'left'}}>Params {index}:</Col>
                 <Col md={12}>
                   <FormControl
                     placeholder={`${value.name}: ${value.type}`}
@@ -52,13 +53,12 @@ function Function(props: { data: any; callback: any }) {
   };
   return (
     <div className="Function">
-      <h2>{functionData?.name}</h2>
       {renderInputParams()}
-      <Row>
-        <Col md={1}>
+      <Row className="buttonArea">
+        <Col md={2}>
           <Row>
             <Button
-              variant={"success"}
+              variant={"primary"}
               onClick={() => {
                 console.log("\x1b[36m%s\x1b[0m", "paramsValues", paramValues);
                 props.callback(
@@ -72,9 +72,8 @@ function Function(props: { data: any; callback: any }) {
             </Button>
           </Row>
         </Col>
-      </Row>
-      <Row className={"mt-1"}>
-        <Col md={1}>
+
+        <Col md={2} style={{ marginLeft: '7px'}}>
           <Row>
             <Button
               variant={"secondary"}

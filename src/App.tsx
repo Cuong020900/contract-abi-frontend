@@ -1,9 +1,9 @@
-import React, { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import "./App.css";
 import Contract from "./components/Contract";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
-import { Dropdown, DropdownButton } from "react-bootstrap";
+import NavBar from "./components/navbar";
 
 function App() {
   const [listContract, setListContract] = useState<string[]>([]);
@@ -18,16 +18,6 @@ function App() {
       });
   }, []);
 
-  const renderListContract = useCallback(() => {
-    return listContract.map((item) => {
-      return (
-        <Dropdown.Item>
-          <Link to={`/${item.toLowerCase()}`}>{item} contract</Link>
-        </Dropdown.Item>
-      );
-    });
-  }, [listContract]);
-
   const renderListContractRoute = useCallback(() => {
     return listContract.map((item) => {
       return (
@@ -40,17 +30,7 @@ function App() {
   return (
     <Router>
       <div className="App">
-        <DropdownButton
-          id="dropdown-basic-button"
-          title="Select Contract"
-          className={"mb-5"}
-        >
-          <Dropdown.Item>
-            <Link to="/">Home</Link>
-          </Dropdown.Item>
-          {renderListContract()}
-        </DropdownButton>
-
+        <NavBar></NavBar>
         <Route path="/" exact>
           <Contract name="Test"></Contract>
         </Route>

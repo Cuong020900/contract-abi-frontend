@@ -1,0 +1,30 @@
+.menuContent {
+    justify-content: center;
+    margin-top: 3.5rem;
+    font-weight: 600;
+}
+
+.menuItem {
+    cursor: pointer;
+    padding: 0.75rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    text-shadow: 1px 1px #AAA;
+}
+nav {
+    list-style-type: none;
+}
+.offcanvas-start {
+    top: 0;
+    left: 0;
+    width: 325px;
+    border-right: 1px solid rgba(0,0,0,.2);
+    transform: translateX(-100%);
+}
+a {
+    color: #6C757E;
+    text-decoration: none;
+}
+a:hover {
+    color: #3498db;
+}
